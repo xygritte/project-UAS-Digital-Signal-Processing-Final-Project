@@ -1,40 +1,40 @@
-# DSP Image Filtering Research
+# Penelitian Penyaringan Citra Digital - Pengolahan Sinyal Digital
 
 **Final Project — Pengolahan Sinyal Digital**
 
-## Research Topic
+## Topik Penelitian
 
-**Comparison of Mean, Gaussian, and Median Filtering for Salt-and-Pepper Noise Reduction in Digital Images**
+**Perbandingan Penyaringan Mean, Gaussian, dan Median untuk Mengurangi Noise Salt-and-Pepper pada Citra Digital**
 
-## Research Objective
+## Tujuan Penelitian
 
-This project experimentally compares three spatial filtering methods for reducing salt-and-pepper noise in digital images:
+Proyek ini membandingkan secara eksperimen tiga metode penyaringan spasial untuk mengurangi noise salt-and-pepper pada citra digital:
 
-- Mean Filter, 3×3 kernel
-- Gaussian Filter, 5×5 kernel
-- Median Filter, 5×5 kernel
+- Mean Filter dengan kernel 3×3
+- Gaussian Filter dengan kernel 5×5
+- Median Filter dengan kernel 5×5
 
-The experiments evaluate the processed images against the corresponding clean reference images using **MSE, PSNR, and SSIM**.
+Hasil citra yang telah diproses dibandingkan dengan citra referensi yang bersih menggunakan **MSE, PSNR, dan SSIM**.
 
-## Experimental Pipeline
+## Alur Eksperimen
 
 ```text
-Clean image
+Citra bersih
     ↓
-Preprocessing / grayscale
+Pra-pemrosesan / grayscale
     ↓
-Add salt-and-pepper noise
+Penambahan noise salt-and-pepper
     ↓
-┌──────────────┬───────────────┬───────────────┐
-│ Mean 3×3     │ Gaussian 5×5  │ Median 5×5    │
-└──────────────┴───────────────┴───────────────┘
+┌──────────────┬────────────────┬───────────────┐
+│ Mean 3×3     │ Gaussian 5×5   │ Median 5×5    │
+└──────────────┴────────────────┴───────────────┘
     ↓
 MSE / PSNR / SSIM
     ↓
-Tables + visualizations
+Tabel + visualisasi
 ```
 
-## Repository Structure
+## Struktur Repository
 
 ```text
 ├── data/
@@ -57,26 +57,26 @@ Tables + visualizations
 
 ## Data
 
-The current implementation uses reproducible sample images provided by `scikit-image` (`camera`, `coins`, and `moon`) as clean reference images. The code saves generated noisy images and filtered outputs locally so the reported measurements can be reproduced.
+Implementasi saat ini menggunakan gambar contoh yang dapat direproduksi dari `scikit-image`, yaitu `camera`, `coins`, dan `moon`, sebagai citra referensi bersih. Program menyimpan citra yang telah diberi noise dan hasil penyaringan secara lokal sehingga pengukuran dapat diulang kembali.
 
-## How to Run
+## Cara Menjalankan
 
 ```bash
 pip install -r requirements.txt
 python src/main.py
 ```
 
-The script generates:
+Program akan menghasilkan:
 
-- noisy images;
-- filtered images for all three methods;
-- a CSV table containing MSE, PSNR, and SSIM;
-- comparison figures.
+- citra yang telah diberi noise;
+- citra hasil penyaringan dari ketiga metode;
+- tabel CSV yang berisi MSE, PSNR, dan SSIM;
+- visualisasi perbandingan.
 
-## Reproducibility
+## Reproduksibilitas
 
-The random seed is fixed in the experiment configuration so that the generated noise and measurements can be reproduced. No experimental result is hard-coded in the repository.
+Seed acak ditetapkan pada konfigurasi eksperimen sehingga noise dan hasil pengukuran dapat direproduksi. Tidak ada hasil eksperimen yang ditulis secara manual atau dibuat-buat di dalam repository.
 
-## Relation to the Course Assignment
+## Keterkaitan dengan Tugas
 
-The project is designed to satisfy the final-project requirements for DSP by including a real image-processing experiment, at least three experimental scenarios, quantitative evaluation, visualization, and analysis-ready outputs.
+Proyek ini dirancang agar memenuhi persyaratan Final Project Pengolahan Sinyal Digital dengan mencakup eksperimen pengolahan citra, minimal tiga skenario eksperimen, evaluasi kuantitatif, visualisasi, dan keluaran yang siap dianalisis untuk paper ilmiah.
