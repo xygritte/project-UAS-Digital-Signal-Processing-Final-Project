@@ -27,7 +27,7 @@ FILTERS = {
 
 
 def load_dataset() -> dict[str, np.ndarray]:
-    """Load small reproducible grayscale reference images from scikit-image."""
+    """Memuat gambar referensi grayscale yang dapat direproduksi dari scikit-image."""
     return {
         "camera": img_as_ubyte(data.camera()),
         "coins": img_as_ubyte(data.coins()),
@@ -60,20 +60,20 @@ def run() -> None:
             metrics = evaluate(reference, filtered)
             rows.append(
                 {
-                    "image": name,
-                    "noise_type": "salt-and-pepper",
-                    "noise_amount": NOISE_AMOUNT,
-                    "method": method_name,
+                    "gambar": name,
+                    "jenis_noise": "salt-and-pepper",
+                    "jumlah_noise": NOISE_AMOUNT,
+                    "metode": method_name,
                     "kernel": "3x3" if method_name == "Mean" else "5x5",
                     **metrics,
                 }
             )
 
-        # One figure per source image for direct visual comparison.
+        # Satu gambar untuk setiap sumber agar hasil dapat dibandingkan langsung.
         figure, axes = plt.subplots(1, 5, figsize=(15, 3.2))
         display_images = [
-            ("Original", reference),
-            ("Noisy", noisy),
+            ("Citra Asli", reference),
+            ("Citra Ber-noise", noisy),
             ("Mean 3x3", FILTERS["Mean"](noisy)),
             ("Gaussian 5x5", FILTERS["Gaussian"](noisy)),
             ("Median 5x5", FILTERS["Median"](noisy)),
@@ -92,25 +92,25 @@ def run() -> None:
     results.to_csv(results_dir / "metrics.csv", index=False)
 
     summary = (
-        results.groupby("method", as_index=False)[["mse", "psnr_db", "ssim"]]
+        results.groupby("metode", as_index=False)[["mse", "psnr_db", "ssim"]]
         .mean()
         .sort_values("psnr_db", ascending=False)
     )
     summary.to_csv(results_dir / "method_summary.csv", index=False)
 
-    # Summary chart: average PSNR across the three reference images.
+    # Grafik ringkasan: rata-rata PSNR pada tiga citra referensi.
     figure, ax = plt.subplots(figsize=(7, 4))
-    ax.bar(summary["method"], summary["psnr_db"])
-    ax.set_ylabel("Average PSNR (dB)")
-    ax.set_xlabel("Filtering method")
-    ax.set_title("Average PSNR by Filtering Method")
+    ax.bar(summary["metode"], summary["psnr_db"])
+    ax.set_ylabel("Rata-rata PSNR (dB)")
+    ax.set_xlabel("Metode penyaringan")
+    ax.set_title("Rata-rata PSNR Berdasarkan Metode Penyaringan")
     figure.tight_layout()
     figure.savefig(FIGURES / "average_psnr.png", dpi=200, bbox_inches="tight")
     plt.close(figure)
 
-    print("Experiment complete.")
-    print(f"Results: {results_dir / 'metrics.csv'}")
-    print(f"Summary: {results_dir / 'method_summary.csv'}")
+    print("Eksperimen selesai.")
+    print(f"Hasil: {results_dir / 'metrics.csv'}")
+    print(f"Ringkasan: {results_dir / 'method_summary.csv'}")
     print(summary.to_string(index=False))
 
 
