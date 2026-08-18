@@ -5,7 +5,7 @@ from skimage.metrics import mean_squared_error, peak_signal_noise_ratio, structu
 
 
 def evaluate(reference: np.ndarray, processed: np.ndarray) -> dict[str, float]:
-    """Return MSE, PSNR, and SSIM for two uint8 grayscale images."""
+    """Mengembalikan nilai MSE, PSNR, dan SSIM untuk dua citra grayscale uint8."""
     reference_f = reference.astype(np.float64)
     processed_f = processed.astype(np.float64)
 
