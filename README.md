@@ -1,6 +1,6 @@
 # Penelitian Penyaringan Citra Digital - Pengolahan Sinyal Digital
 
-**Final Project — Pengolahan Sinyal Digital**
+**Final Project - Pengolahan Sinyal Digital**
 
 ## Topik Penelitian
 
@@ -10,11 +10,11 @@
 
 Proyek ini membandingkan secara eksperimen tiga metode penyaringan spasial untuk mengurangi noise salt-and-pepper pada citra digital:
 
-- Mean Filter dengan kernel 3×3
-- Gaussian Filter dengan kernel 5×5
-- Median Filter dengan kernel 5×5
+- Mean Filter dengan kernel 3x3
+- Gaussian Filter dengan kernel 5x5
+- Median Filter dengan kernel 5x5
 
-Hasil citra yang telah diproses dibandingkan dengan citra referensi yang bersih menggunakan **MSE, PSNR, dan SSIM**.
+Evaluasi menggunakan MSE, PSNR, dan SSIM.
 
 ## Alur Eksperimen
 
@@ -26,26 +26,27 @@ Pra-pemrosesan / grayscale
 Penambahan noise salt-and-pepper
     ↓
 ┌──────────────┬────────────────┬───────────────┐
-│ Mean 3×3     │ Gaussian 5×5   │ Median 5×5    │
+│ Mean 3x3     │ Gaussian 5x5   │ Median 5x5    │
 └──────────────┴────────────────┴───────────────┘
     ↓
 MSE / PSNR / SSIM
     ↓
-Tabel + visualisasi
+Tabel + visualisasi + analisis
+    ↓
+Paper IEEE Conference
 ```
 
 ## Struktur Repository
 
 ```text
 ├── data/
-│   ├── original/
-│   └── noisy/
 ├── outputs/
 │   ├── figures/
-│   ├── mean/
-│   ├── gaussian/
-│   ├── median/
 │   └── results/
+├── papper/
+│   ├── Perbandingan Filtering Citra Digital.docx
+│   ├── paper.tex
+│   └── referensi.bib
 ├── src/
 │   ├── generate_noise.py
 │   ├── filtering.py
@@ -57,7 +58,19 @@ Tabel + visualisasi
 
 ## Data
 
-Implementasi saat ini menggunakan gambar contoh yang dapat direproduksi dari `scikit-image`, yaitu `camera`, `coins`, dan `moon`, sebagai citra referensi bersih. Program menyimpan citra yang telah diberi noise dan hasil penyaringan secara lokal sehingga pengukuran dapat diulang kembali.
+Implementasi menggunakan tiga gambar contoh yang dapat direproduksi dari `scikit-image`, yaitu `camera`, `coins`, dan `moon`, sebagai citra referensi bersih. Program menghasilkan citra noisy dan hasil penyaringan secara deterministik menggunakan seed yang ditetapkan.
+
+## Hasil Eksperimen
+
+Rata-rata hasil dari tiga citra:
+
+| Metode | MSE | PSNR (dB) | SSIM |
+|---|---:|---:|---:|
+| Mean 3x3 | 186,8367 | 25,7440 | 0,5275 |
+| Gaussian 5x5 | 155,8329 | 26,7129 | 0,5985 |
+| Median 5x5 | **89,2895** | **30,8361** | **0,8355** |
+
+Median Filter menjadi metode terbaik pada ketiga metrik dan juga unggul secara konsisten pada `camera`, `coins`, dan `moon`.
 
 ## Cara Menjalankan
 
@@ -66,17 +79,23 @@ pip install -r requirements.txt
 python src/main.py
 ```
 
-Program akan menghasilkan:
+Program menghasilkan:
 
 - citra yang telah diberi noise;
 - citra hasil penyaringan dari ketiga metode;
-- tabel CSV yang berisi MSE, PSNR, dan SSIM;
+- `outputs/results/metrics.csv`;
+- `outputs/results/method_summary.csv`;
 - visualisasi perbandingan.
+
+## Paper
+
+Sumber paper IEEE tersedia pada:
+
+- `papper/paper.tex`
+- `papper/referensi.bib`
+
+Paper akhir memenuhi struktur IEEE Conference dan menggunakan hasil eksperimen aktual dari repository. PDF final dibuat dari sumber tersebut dan tersedia sebagai berkas lokal pada hasil pengerjaan percakapan.
 
 ## Reproduksibilitas
 
-Seed acak ditetapkan pada konfigurasi eksperimen sehingga noise dan hasil pengukuran dapat direproduksi. Tidak ada hasil eksperimen yang ditulis secara manual atau dibuat-buat di dalam repository.
-
-## Keterkaitan dengan Tugas
-
-Proyek ini dirancang agar memenuhi persyaratan Final Project Pengolahan Sinyal Digital dengan mencakup eksperimen pengolahan citra, minimal tiga skenario eksperimen, evaluasi kuantitatif, visualisasi, dan keluaran yang siap dianalisis untuk paper ilmiah.
+Seed noise ditetapkan sehingga eksperimen dapat dijalankan kembali. Tidak ada hasil eksperimen yang ditulis secara manual atau dibuat-buat di dalam program.
