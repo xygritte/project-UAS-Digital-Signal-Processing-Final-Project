@@ -93,8 +93,9 @@ Sumber paper IEEE tersedia pada:
 
 - `papper/paper.tex`
 - `papper/referensi.bib`
+- `papper/Perbandingan Filtering Citra Digital.docx`
 
-Paper akhir memenuhi struktur IEEE Conference dan menggunakan hasil eksperimen aktual dari repository. PDF final dibuat dari sumber tersebut dan tersedia sebagai berkas lokal pada hasil pengerjaan percakapan.
+PDF final dibuat berdasarkan sumber tersebut dan hasil eksperimen aktual yang tersimpan di `outputs/results/`.
 
 ## Reproduksibilitas
 
