@@ -5,44 +5,139 @@
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
 \usepackage{booktabs}
+\usepackage{url}
 \usepackage{cite}
+\usepackage{array}
 \graphicspath{{../outputs/figures/}}
 \title{Perbandingan Mean, Gaussian, dan Median Filtering untuk Reduksi Salt-and-Pepper Noise pada Citra Digital}
-\author{\IEEEauthorblockN{Ahmad Furqon Ramadhani}\IEEEauthorblockA{Program Studi Teknik Informatika\\Universitas Darussalam Gontor\\Email: ahfura70@gmail.com}}
-\begin{document}\maketitle
+\author{\IEEEauthorblockN{Ahmad Furqon Ramadhani}\IEEEauthorblockA{Program Studi Teknik Informatika\\Universitas Darussalam Gontor\\NIM: 452024611066\\Email: ahfura70@gmail.com}}
+\begin{document}
+\maketitle
 \begin{abstract}
-Noise merupakan gangguan yang dapat menurunkan kualitas citra digital. Penelitian ini membandingkan Mean Filter, Gaussian Filter, dan Median Filter untuk mengurangi salt-and-pepper noise. Eksperimen menggunakan tiga citra grayscale, yaitu camera, coins, dan moon, dari scikit-image. Noise sebesar 0,05 ditambahkan dengan seed tetap. Tiga skenario diuji: Mean Filter 3x3, Gaussian Filter 5x5, dan Median Filter 5x5. Evaluasi menggunakan MSE, PSNR, dan SSIM. Median Filter menghasilkan rata-rata MSE 89,2895, PSNR 30,8361 dB, dan SSIM 0,8355; Gaussian Filter 155,8329, 26,7129 dB, dan 0,5985; Mean Filter 186,8367, 25,7440 dB, dan 0,5275. Median Filter menjadi metode terbaik pada konfigurasi penelitian.
+Noise merupakan gangguan yang dapat menurunkan kualitas citra digital. Penelitian ini membandingkan tiga metode penyaringan spasial, yaitu Mean Filter, Gaussian Filter, dan Median Filter, untuk mengurangi salt-and-pepper noise pada citra digital. Eksperimen menggunakan tiga citra grayscale, yaitu camera, coins, dan moon, yang tersedia pada pustaka scikit-image. Noise sebesar 0,05 ditambahkan dengan seed acak tetap agar eksperimen dapat direproduksi. Tiga skenario diuji: Mean Filter 3x3, Gaussian Filter 5x5, dan Median Filter 5x5. Kinerja dievaluasi menggunakan Mean Squared Error (MSE), Peak Signal-to-Noise Ratio (PSNR), dan Structural Similarity Index (SSIM) terhadap citra referensi. Hasil menunjukkan Median Filter menghasilkan rata-rata MSE terendah 89,2895, PSNR tertinggi 30,8361 dB, dan SSIM tertinggi 0,8355. Gaussian Filter menghasilkan MSE 155,8329, PSNR 26,7129 dB, dan SSIM 0,5985, sedangkan Mean Filter menghasilkan MSE 186,8367, PSNR 25,7440 dB, dan SSIM 0,5275. Dengan demikian, pada konfigurasi penelitian ini Median Filter memberikan hasil terbaik untuk salt-and-pepper noise.
 \end{abstract}
-\begin{IEEEkeywords}pengolahan citra digital, filtering, salt-and-pepper noise, median filter, PSNR\end{IEEEkeywords}
+\begin{IEEEkeywords}
+Pengolahan citra digital, filtering, salt-and-pepper noise, median filter, PSNR.
+\end{IEEEkeywords}
 \section{Pendahuluan}
-Citra digital dapat mengalami gangguan selama akuisisi, pemrosesan, penyimpanan, maupun transmisi. Salt-and-pepper noise menghasilkan piksel ekstrem yang menurunkan kualitas citra. Filtering spasial merupakan pendekatan dasar untuk denoising. Mean Filter melakukan perataan lokal, Gaussian Filter melakukan smoothing berbobot, dan Median Filter menggunakan nilai median sehingga sesuai untuk noise impuls [1], [2]. Penelitian ini membandingkan ketiga metode tersebut pada tiga citra grayscale menggunakan MSE, PSNR, dan SSIM [3].
+Citra digital dapat mengalami gangguan selama akuisisi, pemrosesan, penyimpanan, maupun transmisi. Salah satu gangguan yang umum dimodelkan dalam pengolahan citra adalah salt-and-pepper noise, yang menghasilkan piksel ekstrem bernilai terang atau gelap. Pengurangan noise harus dilakukan dengan tetap mempertahankan struktur dan detail penting citra.
+
+Filtering spasial merupakan salah satu pendekatan dasar untuk denoising. Mean Filter meratakan nilai piksel pada lingkungan lokal, sedangkan Gaussian Filter memberikan bobot yang menurun berdasarkan jarak dari pusat kernel. Median Filter menggunakan nilai median pada lingkungan lokal dan memiliki karakteristik nonlinier yang membuatnya sesuai untuk noise impuls \cite{huang1979,perreault2007}.
+
+Dalam penelitian ini tiga metode tersebut dibandingkan secara eksperimental pada tiga citra grayscale. Evaluasi menggunakan MSE, PSNR, dan SSIM. SSIM digunakan karena penilaian kualitas berbasis struktur dapat melengkapi pengukuran berbasis error piksel \cite{wang2004}.
+
+Tujuan penelitian adalah: (1) menerapkan tiga metode filtering pada citra yang diberi salt-and-pepper noise; (2) membandingkan kinerja menggunakan MSE, PSNR, dan SSIM; dan (3) menganalisis metode yang memberikan hasil terbaik pada konfigurasi eksperimen.
+
 \section{Related Work}
-Huang, Yang, dan Tang memperkenalkan algoritma median filtering dua dimensi berbasis histogram [1]. Perreault dan Hébert mengembangkan median filtering yang lebih efisien [2]. Konsep scale-space berkaitan dengan representasi citra pada berbagai skala [4]. Wang et al. memperkenalkan SSIM untuk menilai kemiripan struktural citra [3]. scikit-image menyediakan algoritma pengolahan citra Python dan citra contoh untuk penelitian serta pendidikan [5].
+Median filtering merupakan salah satu teknik klasik dalam pengolahan citra. Huang, Yang, dan Tang memperkenalkan algoritma median dua dimensi yang menggunakan histogram tingkat keabuan untuk mempercepat pencarian median \cite{huang1979}. Perreault dan Hébert kemudian mengembangkan algoritma median filtering dengan kompleksitas waktu konstan terhadap ukuran kernel tertentu \cite{perreault2007}.
+
+Untuk penghalusan berbasis Gaussian, konsep scale-space menunjukkan pentingnya pengendalian skala dalam representasi sinyal dan citra \cite{witkin1983}. Dalam implementasi penelitian ini Gaussian Filter digunakan sebagai metode smoothing berbasis kernel Gaussian.
+
+Penilaian kualitas citra tidak selalu cukup menggunakan perbedaan piksel. Wang et al. memperkenalkan Structural Similarity Index (SSIM) sebagai pendekatan untuk menilai perubahan informasi struktural antara citra referensi dan citra terdistorsi \cite{wang2004}.
+
+Implementasi eksperimen menggunakan scikit-image yang merupakan pustaka pengolahan citra Python untuk penelitian, pendidikan, dan pengembangan perangkat lunak ilmiah \cite{vanderwalt2014}.
+
 \section{Metodologi}
 \subsection{Dataset}
-Dataset terdiri atas camera, coins, dan moon dari scikit-image. Camera dan moon berukuran 512x512 piksel, sedangkan coins berukuran 303x384 piksel. Ketiganya bertipe uint8 [5].
+Dataset terdiri atas tiga citra grayscale contoh dari scikit-image: camera, coins, dan moon. Citra camera dan moon berukuran 512x512 piksel, sedangkan coins berukuran 303x384 piksel. Ketiganya bertipe uint8 dengan rentang intensitas 0--255. Dataset digunakan sebagai citra referensi bersih. Sumber data dan pustaka pemrosesan didokumentasikan untuk menjaga reproduksibilitas \cite{vanderwalt2014}.
+
 \subsection{Pembentukan Noise}
-Salt-and-pepper noise ditambahkan sebesar 0,05. Seed yang digunakan adalah 42 untuk camera, 43 untuk coins, dan 44 untuk moon agar eksperimen dapat direproduksi.
-\subsection{Filtering dan Evaluasi}
-Mean Filter menggunakan kernel 3x3, Gaussian Filter 5x5, dan Median Filter 5x5. MSE mengukur kesalahan kuadrat rata-rata, PSNR dihitung dari MSE, dan SSIM mengukur kemiripan struktural [3].
+Setiap citra diberi salt-and-pepper noise dengan jumlah noise 0,05. Seed ditetapkan pada 42 dan setiap citra memperoleh seed 42, 43, atau 44 agar noise tetap dapat direproduksi. Citra noisy kemudian menjadi masukan yang sama untuk ketiga metode filtering.
+
+\subsection{Filtering}
+Mean Filter menggunakan kernel 3x3. Gaussian Filter menggunakan kernel 5x5. Median Filter menggunakan kernel 5x5. Secara umum operasi Mean Filter dapat ditulis sebagai
+\begin{equation}
+g(x,y)=\frac{1}{mn}\sum_{i=1}^{m}\sum_{j=1}^{n} f(x+i,y+j).
+\end{equation}
+Gaussian Filter menggunakan kernel berbentuk fungsi Gaussian, sedangkan Median Filter mengganti nilai piksel dengan median dari lingkungan lokal.
+
+\subsection{Evaluasi}
+MSE digunakan untuk mengukur kesalahan kuadrat rata-rata antara citra referensi dan citra hasil:
+\begin{equation}
+MSE=\frac{1}{N}\sum_{i=1}^{N}(x_i-\hat{x}_i)^2.
+\end{equation}
+PSNR dihitung dengan:
+\begin{equation}
+PSNR=10\log_{10}\left(\frac{MAX_I^2}{MSE}\right).
+\end{equation}
+SSIM digunakan untuk mengukur kemiripan struktural \cite{wang2004}. Nilai MSE yang lebih kecil serta PSNR dan SSIM yang lebih besar menunjukkan hasil yang lebih baik.
+
 \section{Experimental Setup}
-Eksperimen dijalankan menggunakan Python, NumPy, OpenCV, Pandas, Matplotlib, dan scikit-image. Tiga skenario adalah E1 Mean 3x3, E2 Gaussian 5x5, dan E3 Median 5x5. Setiap skenario diterapkan pada ketiga citra noisy.
-\begin{table}[t]\caption{Skenario Eksperimen}\centering\begin{tabular}{lll}\toprule Eksperimen & Metode & Kernel\\\midrule E1 & Mean Filter & 3x3\\ E2 & Gaussian Filter & 5x5\\ E3 & Median Filter & 5x5\\\bottomrule\end{tabular}\end{table}
+Eksperimen dijalankan menggunakan Python dengan pustaka NumPy, OpenCV, Pandas, Matplotlib, dan scikit-image. Tiga skenario yang digunakan dirangkum pada Tabel I.
+
+\begin{table}[t]
+\caption{Skenario Eksperimen}
+\centering
+\begin{tabular}{lll}
+\toprule
+Eksperimen & Metode & Kernel \\
+\midrule
+E1 & Mean Filter & 3x3 \\
+E2 & Gaussian Filter & 5x5 \\
+E3 & Median Filter & 5x5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Setiap skenario diterapkan pada ketiga citra yang telah diberi noise. Hasil kemudian dibandingkan terhadap citra referensi asli. Program menghasilkan tabel evaluasi CSV dan visualisasi perbandingan sehingga seluruh proses dapat direproduksi. Source code dan hasil eksperimen tersedia pada repositori GitHub: \url{https://github.com/xygritte/project-UAS-Digital-Signal-Processing-Final-Project}.
+
 \section{Hasil dan Pembahasan}
-Tabel II menunjukkan rata-rata hasil.
-\begin{table}[t]\caption{Rata-rata Hasil Evaluasi}\centering\begin{tabular}{lccc}\toprule Metode & MSE & PSNR (dB) & SSIM\\\midrule Mean 3x3 & 186.8367 & 25.7440 & 0.5275\\ Gaussian 5x5 & 155.8329 & 26.7129 & 0.5985\\ Median 5x5 & \textbf{89.2895} & \textbf{30.8361} & \textbf{0.8355}\\\bottomrule\end{tabular}\end{table}
-Median Filter menghasilkan MSE paling rendah dan PSNR serta SSIM paling tinggi. Keunggulan tersebut juga konsisten pada camera, coins, dan moon. Mean Filter menghasilkan performa terendah, sedangkan Gaussian Filter berada di antara keduanya. Hal ini sesuai dengan karakteristik median filtering yang lebih tahan terhadap nilai pencilan [1], [2].
-\begin{figure}[t]\centering\includegraphics[width=\linewidth]{perbandingan_citra.png}\caption{Perbandingan citra asli, citra ber-noise, dan hasil filtering.}\end{figure}
-\begin{figure}[t]\centering\includegraphics[width=0.9\linewidth]{average_psnr.png}\caption{Perbandingan rata-rata PSNR.}\end{figure}
-Median mencapai PSNR 30,8361 dB, lebih tinggi daripada Gaussian 26,7129 dB dan Mean 25,7440 dB. Kesimpulan dibatasi oleh tiga citra dan satu tingkat noise; penelitian lanjutan perlu menguji variasi dataset, level noise, ukuran kernel, dan jenis noise.
+\subsection{Hasil Kuantitatif}
+Tabel II menunjukkan rata-rata metrik dari ketiga citra.
+
+\begin{table}[t]
+\caption{Rata-rata Hasil Evaluasi}
+\centering
+\begin{tabular}{lccc}
+\toprule
+Metode & MSE $\downarrow$ & PSNR (dB) $\uparrow$ & SSIM $\uparrow$ \\
+\midrule
+Mean 3x3 & 186.8367 & 25.7440 & 0.5275 \\
+Gaussian 5x5 & 155.8329 & 26.7129 & 0.5985 \\
+Median 5x5 & \textbf{89.2895} & \textbf{30.8361} & \textbf{0.8355} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Median Filter menghasilkan MSE paling rendah dan PSNR serta SSIM paling tinggi. Hal ini menunjukkan bahwa hasil Median Filter memiliki perbedaan piksel paling kecil dan kemiripan struktur paling tinggi terhadap citra referensi pada konfigurasi penelitian. Keunggulan tersebut juga konsisten pada setiap citra. Pada camera, coins, dan moon, Median Filter menghasilkan MSE terendah sekaligus PSNR dan SSIM tertinggi di antara tiga metode.
+
+Mean Filter menghasilkan performa terendah. Operasi rata-rata dapat dipengaruhi oleh piksel ekstrem dari salt-and-pepper noise sehingga efek smoothing tidak selalu menghilangkan noise secara efektif dan dapat mengaburkan detail tepi. Gaussian Filter memperbaiki hasil dibandingkan Mean Filter, tetapi masih berada di bawah Median Filter pada seluruh metrik.
+
+Perbedaan ukuran kernel juga perlu diperhatikan. Penelitian ini menggunakan kernel 3x3 untuk Mean Filter dan 5x5 untuk Gaussian serta Median, sehingga hasil tidak dimaksudkan sebagai perbandingan murni berdasarkan ukuran kernel. Kernel yang lebih besar memproses lingkungan piksel yang lebih luas dan dapat meningkatkan efek smoothing. Eksperimen lanjutan dengan ukuran kernel yang sama atau beberapa ukuran kernel diperlukan untuk mengisolasi pengaruh ukuran kernel.
+
+Dari perspektif frekuensi, Mean Filter dan Gaussian Filter merupakan operasi smoothing yang cenderung bertindak seperti low-pass filtering sehingga komponen frekuensi tinggi yang berkaitan dengan tepi dan detail dapat ikut dilemahkan. Median Filter bersifat nonlinier, sehingga tidak dapat dijelaskan sebagai filter low-pass linear sederhana; pada noise impuls, operasi median dapat mengurangi piksel pencilan sambil mempertahankan struktur tepi lebih baik. Hasil MSE, PSNR, dan SSIM pada penelitian ini mendukung karakteristik tersebut.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{perbandingan_citra.png}
+\caption{Perbandingan citra asli, citra ber-noise, dan hasil tiga metode filtering.}
+\label{fig:citra}
+\end{figure}
+
+Gambar~\ref{fig:citra} memperlihatkan bahwa Median Filter memberikan hasil visual yang paling mendekati citra referensi pada kasus salt-and-pepper noise. Keunggulan tersebut sesuai dengan karakteristik median filtering sebagai metode yang lebih tahan terhadap nilai pencilan pada lingkungan lokal \cite{huang1979,perreault2007}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\linewidth]{psnr_rata_rata.png}
+\caption{Perbandingan rata-rata PSNR.}
+\label{fig:psnr}
+\end{figure}
+
+Gambar~\ref{fig:psnr} memperlihatkan selisih PSNR yang jelas. Median mencapai 30,8361 dB, lebih tinggi daripada Gaussian 26,7129 dB dan Mean 25,7440 dB. Hal ini menunjukkan bahwa median filtering lebih efektif pada jenis noise yang digunakan dalam eksperimen.
+
+Meskipun demikian, hasil ini tidak berarti Median Filter selalu terbaik untuk semua jenis citra dan noise. Penelitian hanya menggunakan tiga citra dan satu tingkat salt-and-pepper noise. Variasi tingkat noise, ukuran kernel, jenis citra, dan jenis noise lain diperlukan untuk generalisasi yang lebih kuat.
+
 \section{Kesimpulan}
-Median Filter 5x5 memberikan performa terbaik pada salt-and-pepper noise pada konfigurasi penelitian ini dengan MSE 89,2895, PSNR 30,8361 dB, dan SSIM 0,8355. Pengembangan selanjutnya dapat memperluas dataset dan variasi parameter.
+Penelitian ini membandingkan Mean Filter 3x3, Gaussian Filter 5x5, dan Median Filter 5x5 untuk mengurangi salt-and-pepper noise pada tiga citra grayscale. Berdasarkan hasil eksperimen, Median Filter memberikan performa terbaik dengan rata-rata MSE 89,2895, PSNR 30,8361 dB, dan SSIM 0,8355. Gaussian Filter berada pada posisi kedua, sedangkan Mean Filter memiliki performa terendah.
+
+Temuan ini menunjukkan bahwa pemilihan metode filtering perlu mempertimbangkan karakteristik noise yang dihadapi. Median Filter sangat efektif pada konfigurasi salt-and-pepper noise yang digunakan. Pengembangan selanjutnya dapat memperluas dataset, menggunakan beberapa level noise dan ukuran kernel, serta membandingkan jenis noise lain untuk mendapatkan kesimpulan yang lebih umum.
+
 \begin{thebibliography}{6}
-\bibitem{huang} T. S. Huang, G. J. Yang, and G. Y. Tang, ``A Fast Two-Dimensional Median Filtering Algorithm,'' IEEE Trans. Acoust., Speech, Signal Process., vol. 27, no. 1, pp. 13--18, 1979, doi: 10.1109/TASSP.1979.1163188.
-\bibitem{perreault} S. Perreault and P. Hébert, ``Median Filtering in Constant Time,'' IEEE Trans. Image Process., vol. 16, no. 9, pp. 2389--2394, 2007, doi: 10.1109/TIP.2007.902329.
-\bibitem{wang} Z. Wang, A. C. Bovik, H. R. Sheikh, and E. P. Simoncelli, ``Image Quality Assessment: From Error Visibility to Structural Similarity,'' IEEE Trans. Image Process., vol. 13, no. 4, pp. 600--612, 2004, doi: 10.1109/TIP.2003.819861.
-\bibitem{witkin} A. P. Witkin, ``Scale-Space Filtering,'' Proc. 8th Int. Joint Conf. Artificial Intelligence, vol. 2, pp. 1019--1022, 1983.
-\bibitem{skimage} S. van der Walt et al., ``scikit-image: Image Processing in Python,'' PeerJ, vol. 2, e453, 2014, doi: 10.7717/peerj.453.
-\bibitem{gonzalez} R. C. Gonzalez and R. E. Woods, Digital Image Processing, 3rd ed. Pearson Prentice Hall, 2008.
+\bibitem{huang1979} T. S. Huang, G. J. Yang, and G. Y. Tang, ``A fast two-dimensional median filtering algorithm,'' \emph{IEEE Trans. Acoust., Speech, Signal Process.}, vol. 27, no. 1, pp. 13--18, Feb. 1979, doi: 10.1109/TASSP.1979.1163188.
+\bibitem{perreault2007} S. Perreault and P. Hébert, ``Median filtering in constant time,'' \emph{IEEE Trans. Image Process.}, vol. 16, no. 9, pp. 2389--2394, Sep. 2007, doi: 10.1109/TIP.2007.902329.
+\bibitem{wang2004} Z. Wang, A. C. Bovik, H. R. Sheikh, and E. P. Simoncelli, ``Image quality assessment: From error visibility to structural similarity,'' \emph{IEEE Trans. Image Process.}, vol. 13, no. 4, pp. 600--612, Apr. 2004, doi: 10.1109/TIP.2003.819861.
+\bibitem{witkin1983} A. P. Witkin, ``Scale-space filtering,'' in \emph{Proc. 8th Int. Joint Conf. Artificial Intelligence}, 1983, vol. 2, pp. 1019--1022.
+\bibitem{vanderwalt2014} S. van der Walt \emph{et al.}, ``scikit-image: Image processing in Python,'' \emph{PeerJ}, vol. 2, e453, 2014, doi: 10.7717/peerj.453.
+\bibitem{gonzalez2008} R. C. Gonzalez and R. E. Woods, \emph{Digital Image Processing}, 3rd ed. Upper Saddle River, NJ, USA: Pearson Prentice Hall, 2008.
 \end{thebibliography}
 \end{document}
