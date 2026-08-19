@@ -1,1 +1,48 @@
-% Sumber paper final tersedia pada percakapan; file ini akan diselaraskan dari commit sumber.
+\documentclass[conference,a4paper]{IEEEtran}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{cite}
+\graphicspath{{../outputs/figures/}}
+\title{Perbandingan Mean, Gaussian, dan Median Filtering untuk Reduksi Salt-and-Pepper Noise pada Citra Digital}
+\author{\IEEEauthorblockN{Ahmad Furqon Ramadhani}\IEEEauthorblockA{Program Studi Teknik Informatika\\Universitas Darussalam Gontor\\Email: ahfura70@gmail.com}}
+\begin{document}\maketitle
+\begin{abstract}
+Noise merupakan gangguan yang dapat menurunkan kualitas citra digital. Penelitian ini membandingkan Mean Filter, Gaussian Filter, dan Median Filter untuk mengurangi salt-and-pepper noise. Eksperimen menggunakan tiga citra grayscale, yaitu camera, coins, dan moon, dari scikit-image. Noise sebesar 0,05 ditambahkan dengan seed tetap. Tiga skenario diuji: Mean Filter 3x3, Gaussian Filter 5x5, dan Median Filter 5x5. Evaluasi menggunakan MSE, PSNR, dan SSIM. Median Filter menghasilkan rata-rata MSE 89,2895, PSNR 30,8361 dB, dan SSIM 0,8355; Gaussian Filter 155,8329, 26,7129 dB, dan 0,5985; Mean Filter 186,8367, 25,7440 dB, dan 0,5275. Median Filter menjadi metode terbaik pada konfigurasi penelitian.
+\end{abstract}
+\begin{IEEEkeywords}pengolahan citra digital, filtering, salt-and-pepper noise, median filter, PSNR\end{IEEEkeywords}
+\section{Pendahuluan}
+Citra digital dapat mengalami gangguan selama akuisisi, pemrosesan, penyimpanan, maupun transmisi. Salt-and-pepper noise menghasilkan piksel ekstrem yang menurunkan kualitas citra. Filtering spasial merupakan pendekatan dasar untuk denoising. Mean Filter melakukan perataan lokal, Gaussian Filter melakukan smoothing berbobot, dan Median Filter menggunakan nilai median sehingga sesuai untuk noise impuls [1], [2]. Penelitian ini membandingkan ketiga metode tersebut pada tiga citra grayscale menggunakan MSE, PSNR, dan SSIM [3].
+\section{Related Work}
+Huang, Yang, dan Tang memperkenalkan algoritma median filtering dua dimensi berbasis histogram [1]. Perreault dan Hébert mengembangkan median filtering yang lebih efisien [2]. Konsep scale-space berkaitan dengan representasi citra pada berbagai skala [4]. Wang et al. memperkenalkan SSIM untuk menilai kemiripan struktural citra [3]. scikit-image menyediakan algoritma pengolahan citra Python dan citra contoh untuk penelitian serta pendidikan [5].
+\section{Metodologi}
+\subsection{Dataset}
+Dataset terdiri atas camera, coins, dan moon dari scikit-image. Camera dan moon berukuran 512x512 piksel, sedangkan coins berukuran 303x384 piksel. Ketiganya bertipe uint8 [5].
+\subsection{Pembentukan Noise}
+Salt-and-pepper noise ditambahkan sebesar 0,05. Seed yang digunakan adalah 42 untuk camera, 43 untuk coins, dan 44 untuk moon agar eksperimen dapat direproduksi.
+\subsection{Filtering dan Evaluasi}
+Mean Filter menggunakan kernel 3x3, Gaussian Filter 5x5, dan Median Filter 5x5. MSE mengukur kesalahan kuadrat rata-rata, PSNR dihitung dari MSE, dan SSIM mengukur kemiripan struktural [3].
+\section{Experimental Setup}
+Eksperimen dijalankan menggunakan Python, NumPy, OpenCV, Pandas, Matplotlib, dan scikit-image. Tiga skenario adalah E1 Mean 3x3, E2 Gaussian 5x5, dan E3 Median 5x5. Setiap skenario diterapkan pada ketiga citra noisy.
+\begin{table}[t]\caption{Skenario Eksperimen}\centering\begin{tabular}{lll}\toprule Eksperimen & Metode & Kernel\\\midrule E1 & Mean Filter & 3x3\\ E2 & Gaussian Filter & 5x5\\ E3 & Median Filter & 5x5\\\bottomrule\end{tabular}\end{table}
+\section{Hasil dan Pembahasan}
+Tabel II menunjukkan rata-rata hasil.
+\begin{table}[t]\caption{Rata-rata Hasil Evaluasi}\centering\begin{tabular}{lccc}\toprule Metode & MSE & PSNR (dB) & SSIM\\\midrule Mean 3x3 & 186.8367 & 25.7440 & 0.5275\\ Gaussian 5x5 & 155.8329 & 26.7129 & 0.5985\\ Median 5x5 & \textbf{89.2895} & \textbf{30.8361} & \textbf{0.8355}\\\bottomrule\end{tabular}\end{table}
+Median Filter menghasilkan MSE paling rendah dan PSNR serta SSIM paling tinggi. Keunggulan tersebut juga konsisten pada camera, coins, dan moon. Mean Filter menghasilkan performa terendah, sedangkan Gaussian Filter berada di antara keduanya. Hal ini sesuai dengan karakteristik median filtering yang lebih tahan terhadap nilai pencilan [1], [2].
+\begin{figure}[t]\centering\includegraphics[width=\linewidth]{perbandingan_citra.png}\caption{Perbandingan citra asli, citra ber-noise, dan hasil filtering.}\end{figure}
+\begin{figure}[t]\centering\includegraphics[width=0.9\linewidth]{average_psnr.png}\caption{Perbandingan rata-rata PSNR.}\end{figure}
+Median mencapai PSNR 30,8361 dB, lebih tinggi daripada Gaussian 26,7129 dB dan Mean 25,7440 dB. Kesimpulan dibatasi oleh tiga citra dan satu tingkat noise; penelitian lanjutan perlu menguji variasi dataset, level noise, ukuran kernel, dan jenis noise.
+\section{Kesimpulan}
+Median Filter 5x5 memberikan performa terbaik pada salt-and-pepper noise pada konfigurasi penelitian ini dengan MSE 89,2895, PSNR 30,8361 dB, dan SSIM 0,8355. Pengembangan selanjutnya dapat memperluas dataset dan variasi parameter.
+\begin{thebibliography}{6}
+\bibitem{huang} T. S. Huang, G. J. Yang, and G. Y. Tang, ``A Fast Two-Dimensional Median Filtering Algorithm,'' IEEE Trans. Acoust., Speech, Signal Process., vol. 27, no. 1, pp. 13--18, 1979, doi: 10.1109/TASSP.1979.1163188.
+\bibitem{perreault} S. Perreault and P. Hébert, ``Median Filtering in Constant Time,'' IEEE Trans. Image Process., vol. 16, no. 9, pp. 2389--2394, 2007, doi: 10.1109/TIP.2007.902329.
+\bibitem{wang} Z. Wang, A. C. Bovik, H. R. Sheikh, and E. P. Simoncelli, ``Image Quality Assessment: From Error Visibility to Structural Similarity,'' IEEE Trans. Image Process., vol. 13, no. 4, pp. 600--612, 2004, doi: 10.1109/TIP.2003.819861.
+\bibitem{witkin} A. P. Witkin, ``Scale-Space Filtering,'' Proc. 8th Int. Joint Conf. Artificial Intelligence, vol. 2, pp. 1019--1022, 1983.
+\bibitem{skimage} S. van der Walt et al., ``scikit-image: Image Processing in Python,'' PeerJ, vol. 2, e453, 2014, doi: 10.7717/peerj.453.
+\bibitem{gonzalez} R. C. Gonzalez and R. E. Woods, Digital Image Processing, 3rd ed. Pearson Prentice Hall, 2008.
+\end{thebibliography}
+\end{document}
